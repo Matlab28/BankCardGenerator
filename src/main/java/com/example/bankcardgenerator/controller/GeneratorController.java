@@ -1,5 +1,7 @@
 package com.example.bankcardgenerator.controller;
 
+import com.example.bankcardgenerator.constant.CardType;
+import com.example.bankcardgenerator.dto.CardResponse;
 import com.example.bankcardgenerator.service.BankAccountGeneratorService;
 import com.example.bankcardgenerator.service.CardGeneratorService;
 import com.example.bankcardgenerator.service.UserAccountGeneratorService;
@@ -27,10 +29,11 @@ public class GeneratorController {
 
     @GetMapping("/card")
     public ResponseEntity<?> generateCard(
-            @RequestParam(defaultValue = "4") String prefix,
-            @RequestParam(defaultValue = "16") int length) {
-        String card = cardService.generateCardNumber(prefix, length);
-        return ResponseEntity.ok(card);
+            @RequestParam(name = "cardType", defaultValue = "VISA") CardType cardType,
+            @RequestParam(name = "length", defaultValue = "16") int length) {
+
+        String card = cardService.generateCardNumber(cardType, length);
+        return ResponseEntity.ok(new CardResponse(card, cardType, length));
     }
 
     @GetMapping("/iban")
